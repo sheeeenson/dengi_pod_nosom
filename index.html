@@ -1,1 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Деньги под носом</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .quiz-container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 15px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Деньги под носом 💰</h1>
+    <div id="quiz"></div>
+    <div class="result" id="result"></div>
+  </div>
 
+  <script>
+    const questions = [
+      {
+        text: "Есть ли у вас база клиентов?",
+        answers: ["Да", "Нет"]
+      },
+      {
+        text: "Используете ли вы email-рассылки?",
+        answers: ["Да", "Нет"]
+      },
+      {
+        text: "Есть ли у вас Telegram-канал?",
+        answers: ["Да", "Нет"]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const quiz = document.getElementById("quiz");
+      quiz.innerHTML = "";
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        const questionEl = document.createElement("div");
+        questionEl.className = "question";
+        questionEl.innerText = q.text;
+        quiz.appendChild(questionEl);
+
+        q.answers.forEach(answer => {
+          const btn = document.createElement("button");
+          btn.innerText = answer;
+          btn.onclick = () => {
+            if (answer === "Да") score++;
+            currentQuestion++;
+            showQuestion();
+          };
+          quiz.appendChild(btn);
+        });
+      } else {
+        document.getElementById("result").innerText = 
+          `У вас ${score} скрытых источника(ов) денег 💵.`;
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
