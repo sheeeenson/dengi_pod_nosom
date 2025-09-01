@@ -32,7 +32,6 @@ body {
   width: 100%;
   max-width: 32rem;
   max-height: 90vh;
-  text-align: center;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -106,10 +105,10 @@ const userAnswers=[];
 
 function renderIntro(){
   container.innerHTML=`
-    <h1 class="text-3xl font-bold mb-6 leading-tight">ДЕНЬГИ ПОД НОСОМ</h1>
-    <p class="text-xl mb-6 leading-relaxed">Привет! Меня создали два очень приятных человека, с которыми я хочу тебя познакомить 😎</p>
-    <p class="text-xl mb-8 leading-relaxed">Но сначала давай быстро посмотрим, сколько денег лежит у тебя прямо под носом 💸</p>
-    <button onclick="startQuiz()" class="btn py-3 px-6 rounded-none font-bold text-lg">Начать</button>
+    <h1 class="text-3xl font-bold mb-6 leading-tight text-center">ДЕНЬГИ ПОД НОСОМ</h1>
+    <p class="text-xl mb-6 leading-relaxed text-center">Привет! Меня создали два очень приятных человека, с которыми я хочу тебя познакомить 😎</p>
+    <p class="text-xl mb-8 leading-relaxed text-center">Но сначала давай быстро посмотрим, сколько денег лежит у тебя прямо под носом 💸</p>
+    <button onclick="startQuiz()" class="btn py-3 px-6 rounded-none font-bold text-lg mx-auto">Начать</button>
   `;
 }
 
@@ -123,10 +122,10 @@ function renderQuestion(){
   const optionsHtml=data.options.map(option=>`<button onclick="${isMultiple?'toggleSelection(this)':'handleAnswer(\''+option+'\')'}" class="btn w-full text-lg py-2 px-4 rounded-none font-bold leading-normal">${option}</button>`).join('');
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:${progress}%"></div></div>
-    <p class="text-sm mt-2 mb-2">Вопрос ${currentQuestionIndex+1}</p>
-    <h2 class="text-xl font-bold mb-4 leading-tight">${data.question}</h2>
+    <p class="text-sm mt-2 mb-2 text-center">Вопрос ${currentQuestionIndex+1}</p>
+    <h2 class="text-xl font-bold mb-4 leading-tight text-center">${data.question}</h2>
     <div id="options" class="flex flex-col gap-2 w-full">${optionsHtml}</div>
-    ${isMultiple?'<button onclick="handleAnswerMultiple()" class="btn mt-4 py-2 px-6 rounded-none font-bold text-lg">Далее</button>':''}
+    ${isMultiple?'<button onclick="handleAnswerMultiple()" class="btn mt-4 py-2 px-6 rounded-none font-bold text-lg mx-auto">Далее</button>':''}
   `;
 }
 
@@ -151,9 +150,9 @@ function renderCommentPage(comment){
   const progress=((currentQuestionIndex+1)/quizData.length)*100;
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:${progress}%"></div></div>
-    <h2 class="text-xl font-bold mt-2 mb-4 leading-tight">Комментарий</h2>
-    <p class="text-lg mb-4 leading-relaxed">${comment}</p>
-    <button onclick="nextQuestion()" class="btn py-2 px-6 rounded-none font-bold text-lg">Далее</button>
+    <h2 class="text-xl font-bold mt-2 mb-4 leading-tight text-center">Комментарий</h2>
+    <p class="text-lg mb-4 leading-relaxed text-center">${comment}</p>
+    <button onclick="nextQuestion()" class="btn py-2 px-6 rounded-none font-bold text-lg mx-auto">Далее</button>
   `;
 }
 
@@ -165,7 +164,7 @@ function renderFirstResultPage(){
   const effectAnswer=userAnswers.find(a=>a.question.includes('эффект')).answer;
   const readinessAnswer=userAnswers.find(a=>a.question.includes('готов')).answer;
   let resultTitle='💸 Смотри, у тебя деньги лежат прямо под носом!';
-  let resultText='У тебя куча недозаработка!<br><br>';
+  let resultText='<strong>У тебя куча недозаработанных денег!</strong><br><br>';
 
   const points=[];
   if(clientAnswer==='Почти никто'){points.push('Твоя клиентская база — это золотая жила, которую ты не используешь!');}
@@ -178,18 +177,20 @@ function renderFirstResultPage(){
 
   if(effectAnswer==='Мощный' && ['Конечно','Конечно, конечно, конечно!'].includes(readinessAnswer)){
     resultTitle='🚀 Ты уже в турбо-режиме!';
-    resultText='Твоя готовность и амбиции — это ключ к успеху. Ты точно заберёшь все деньги, которые лежат у тебя под носом.<br><br>';
-    points.length = 0; // убираем детали, если турбо-режим
+    resultText='<strong>Твоя готовность и амбиции — это ключ к успеху. Ты точно заберёшь все деньги, которые лежат у тебя под носом.</strong><br><br>';
+    points.length = 0;
   }
 
   resultText += points.map((p,i)=>`<strong>${i+1}.</strong> ${p}`).join('<br>');
 
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
-    <div style="overflow-y:auto; max-height:90vh; text-align:left;">
-      <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">${resultTitle}</h2>
-      <p class="text-lg mb-4">${resultText}</p>
-      <button onclick="renderFinalCtaPage()" class="btn py-2 px-6 rounded-none font-bold text-lg">А что дальше?</button>
+    <div style="overflow-y:auto; max-height:90vh;">
+      <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight text-center">${resultTitle}</h2>
+      <p class="text-lg mb-4 text-left font-bold">${resultText}</p>
+      <div class="flex justify-center">
+        <button onclick="renderFinalCtaPage()" class="btn py-2 px-6 rounded-none font-bold text-lg">А что дальше?</button>
+      </div>
     </div>
   `;
 }
@@ -199,12 +200,12 @@ function renderFinalCtaPage(){
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
     <div style="overflow-y:auto; max-height:90vh;">
-      <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">Вот, что я тебе предлагаю...</h2>
-      <p class="text-lg mb-4 leading-relaxed">Хочешь лично познакомиться с двумя приятными людьми, о которых я говорил в начале, и они тебе реально помогут заработать на том, что у тебя уже есть?</p>
-      <div class="flex flex-col gap-2">
-        <a href="${whatsappLink}" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg" style="background-color:#0ea5e9; color:white; box-shadow:2px 2px 0 #0b72b8;">Записаться на бесплатную консультацию</a>
+      <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight text-center">Вот, что я тебе предлагаю...</h2>
+      <p class="text-lg mb-4 leading-relaxed text-center">Хочешь лично познакомиться с двумя приятными людьми, о которых я говорил в начале, и они тебе реально помогут заработать на том, что у тебя уже есть?</p>
+      <div class="flex flex-col gap-2 items-center">
+        <a href="${whatsappLink}" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg text-center" style="background-color:#0ea5e9; color:white; box-shadow:2px 2px 0 #0b72b8;">Записаться на бесплатную консультацию</a>
         <p class="text-sm text-center mt-1 mb-4">В этом месяце — только 5 консультаций! 🔥</p>
-        <a href="https://t.me/dengi_pod_nosom" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg">Деньги под носом</a>
+        <a href="https://t.me/dengi_pod_nosom" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg text-center">Деньги под носом</a>
         <p class="text-sm text-center mt-1">и вступай в наш ТГ-канал, если ещё не там ↑</p>
       </div>
     </div>
