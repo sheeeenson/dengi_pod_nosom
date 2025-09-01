@@ -11,25 +11,28 @@
 <style>
   body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f7f7f7;
+    background-color: #001f3f; /* DOS-синий фон */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 1rem;
   }
-  h1, h2, h3 {
-    font-family: 'Press Start 2P', cursive;
-    color: #212121;
-  }
+  h1,h2,h3 { font-family: 'Press Start 2P', cursive; color: #212121; }
   .container {
     background-color: #fff;
     border: 2px solid #212121;
     box-shadow: 4px 4px 0 #212121;
-    padding: 2rem;
+    padding: 1rem;
     width: 100%;
     max-width: 32rem;
+    max-height: 90vh;
     text-align: center;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
   }
   .btn {
     border: 2px solid #212121;
@@ -38,42 +41,26 @@
     box-shadow: 2px 2px 0 #212121;
     transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
     cursor: pointer;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
   }
   .btn:hover { transform: translateY(-2px) translateX(-2px); }
-  .btn:active { transform: translateY(2px) translateX(2px); box-shadow: 0 0 0 #212121; }
+  .btn:active { transform: translateY(2px) translateX(2px); box-shadow:0 0 0 #212121; }
   .btn-orange {
-    background-color: #f97316;
-    color: white;
-    box-shadow: 2px 2px 0 #ea580c;
+    background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c;
   }
-  .btn-orange:hover { background-color: #ea580c; }
-  .btn-orange:active { background-color: #c2410c; transform: translate(2px,2px); box-shadow: 0 0 0 #c2410c; }
-  .selected {
-    background-color: #f97316;
-    color: white;
-    box-shadow: 2px 2px 0 #ea580c;
-  }
+  .btn-orange:hover { background-color:#ea580c; }
+  .btn-orange:active { background-color:#c2410c; transform:translate(2px,2px); box-shadow:0 0 0 #c2410c; }
+  .selected { background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c; }
   .progress-bar-container {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 10px;
-    background-color: #e0e0e0;
+    position:absolute; top:0; left:0; width:100%; height:10px; background-color:#e0e0e0;
   }
   .progress-bar {
-    height: 100%;
-    background-color: #212121;
-    transition: width 0.5s ease-in-out, opacity 0.3s ease-in-out;
-    opacity: 0;
-    position: relative;
-    overflow: hidden;
+    height:100%; background-color:#212121; transition: width 0.5s ease-in-out, opacity 0.3s ease-in-out;
+    opacity:0; position:relative; overflow:hidden;
   }
   .progress-bar::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
+    content:''; position:absolute; top:0; left:0; width:100%; height:100%;
     background-image: repeating-linear-gradient(
       0deg,
       rgba(255,255,255,0.2) 0,
@@ -84,45 +71,35 @@
     animation: flicker 0.15s infinite linear;
   }
   @keyframes flicker {
-    0%,100% { transform: translateX(0); opacity:0.3; }
-    50% { transform: translateX(-2px); opacity:0.6; }
+    0%,100%{transform:translateX(0);opacity:0.3;}
+    50%{transform:translateX(-2px);opacity:0.6;}
   }
-  .fade-in { animation: fadeIn 0.5s ease forwards; opacity: 0; }
-  @keyframes fadeIn { to { opacity: 1; } }
+  .fade-in { animation: fadeIn 0.5s ease forwards; opacity:0; }
+  @keyframes fadeIn { to{opacity:1;} }
 </style>
 </head>
 <body>
 <div id="quiz-container" class="container p-4 sm:p-8"></div>
 
 <script>
-const quizData = [
-  {type:'single',question:'Первый вопрос — ты хочешь зарабатывать больше и ничего на это не тратить? 😉',
-   options:['Да','Конечно','Погнали!'],
-   comments:{'Да':'Отлично! Твоё желание — первый шаг к результату! 🔥','Конечно':'Вот это настрой! Мы на одной волне! 😎','Погнали!':'Турбо-режим активирован! ⚡'}},
-  {type:'single',question:'Сколько клиентов из твоей базы у тебя реально покупает?',
-   options:['Больше половины','Меньше половины','Почти никто'],
-   comments:{'Больше половины':'Отличный результат, но всегда есть потенциал для роста! 📈','Меньше половины':'Ты видишь проблему. Отлично, теперь давай найдём решение, чтобы активировать этих клиентов! 😉','Почти никто':'Аааа, это твои деньги, которых ты не видишь! 💸'}},
-  {type:'multiple',question:'Что у тебя лежит мертвым грузом, но могло бы приносить деньги?',
-   options:['Контент / материалы','Товары / услуги','Навыки сотрудников','Партнёры / каналы'],
-   comment:'Смотри-ка, вот тут твои скрытые сокровища! 🤑'},
-  {type:'single',question:'Если использовать эти ресурсы, какой эффект ты хочешь увидеть?',
-   options:['Заметный','Мощный'],
-   comments:{'Заметный':'Это отличный настрой! Скоро эти ресурсы станут источником реального дохода! 💰','Мощный':'Хмм, мощный? Отлично, мы включаем ускорение! ⚡'}},
-  {type:'single',question:'Ты точно готов(а) зарабатывать на том, что уже есть?',
-   options:['Да','Конечно','Конечно, конечно, конечно!'],
-   comments:{'Да':'Похоже, ты в боевой готовности! 🚀','Конечно':'Вот это настрой! Мы на одной волне! 😎','Конечно, конечно, конечно!':'Ты уже в турбо-режиме! 🔥'}}
+const quizData=[
+  {type:'single',question:'Первый вопрос — ты хочешь зарабатывать больше и ничего на это не тратить? 😉',options:['Да','Конечно','Погнали!'],comments:{'Да':'Отлично! Твоё желание — первый шаг к результату! 🔥','Конечно':'Вот это настрой! Мы на одной волне! 😎','Погнали!':'Турбо-режим активирован! ⚡'}},
+  {type:'single',question:'Сколько клиентов из твоей базы у тебя реально покупает?',options:['Больше половины','Меньше половины','Почти никто'],comments:{'Больше половины':'Отличный результат, но всегда есть потенциал для роста! 📈','Меньше половины':'Ты видишь проблему. Отлично, теперь давай найдём решение, чтобы активировать этих клиентов! 😉','Почти никто':'Аааа, это твои деньги, которых ты не видишь! 💸'}},
+  {type:'multiple',question:'Что у тебя лежит мертвым грузом, но могло бы приносить деньги?',options:['Контент / материалы','Товары / услуги','Навыки сотрудников','Партнёры / каналы'],comment:'Смотри-ка, вот тут твои скрытые сокровища! 🤑'},
+  {type:'single',question:'Если использовать эти ресурсы, какой эффект ты хочешь увидеть?',options:['Заметный','Мощный'],comments:{'Заметный':'Это отличный настрой! Скоро эти ресурсы станут источником реального дохода! 💰','Мощный':'Хмм, мощный? Отлично, мы включаем ускорение! ⚡'}},
+  {type:'single',question:'Ты точно готов(а) зарабатывать на том, что уже есть?',options:['Да','Конечно','Конечно, конечно, конечно!'],comments:{'Да':'Похоже, ты в боевой готовности! 🚀','Конечно':'Вот это настрой! Мы на одной волне! 😎','Конечно, конечно, конечно!':'Ты уже в турбо-режиме! 🔥'}}
 ];
 
-let currentQuestionIndex = 0;
-const container = document.getElementById('quiz-container');
-const userAnswers = [];
+let currentQuestionIndex=0;
+const container=document.getElementById('quiz-container');
+const userAnswers=[];
 
 function renderIntro(){
-  container.innerHTML = `
-    <h1 class="text-3xl font-bold mb-6 leading-tight">ДЕНЬГИ ПОД НОСОМ</h1>
-    <p class="text-xl mb-6 leading-relaxed">Привет! Меня создали два очень приятных человека, с которыми я хочу тебя познакомить 😎</p>
-    <p class="text-xl mb-8 leading-relaxed">Но сначала давай быстро посмотрим, сколько денег лежит у тебя прямо под носом 💸</p>
-    <button onclick="startQuiz()" class="btn py-3 px-6 rounded-none font-bold text-lg">Начать</button>
+  container.innerHTML=`
+    <h1 class="text-3xl font-bold mb-6 leading-tight fade-in">ДЕНЬГИ ПОД НОСОМ</h1>
+    <p class="text-xl mb-6 leading-relaxed fade-in">Привет! Меня создали два очень приятных человека, с которыми я хочу тебя познакомить 😎</p>
+    <p class="text-xl mb-8 leading-relaxed fade-in">Но сначала давай быстро посмотрим, сколько денег лежит у тебя прямо под носом 💸</p>
+    <button onclick="startQuiz()" class="btn py-3 px-6 rounded-none font-bold text-lg fade-in">Начать</button>
   `;
 }
 
@@ -133,13 +110,13 @@ function renderQuestion(){
   const data=quizData[currentQuestionIndex];
   const isMultiple=data.type==='multiple';
   const progress=(currentQuestionIndex/quizData.length)*100;
-  const optionsHtml=data.options.map(option=>`<button onclick="${isMultiple?'toggleSelection(this)':'handleAnswer(\''+option+'\')'}" class="btn w-full text-lg py-3 px-4 rounded-none font-bold leading-normal fade-in">${option}</button>`).join('');
+  const optionsHtml=data.options.map(option=>`<button onclick="${isMultiple?'toggleSelection(this)':'handleAnswer(\''+option+'\')'}" class="btn w-full text-lg py-2 px-4 rounded-none font-bold leading-normal fade-in">${option}</button>`).join('');
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:${progress}%"></div></div>
-    <p class="text-sm mt-4 mb-2 fade-in">Вопрос ${currentQuestionIndex+1}</p>
-    <h2 class="text-xl font-bold mb-8 leading-tight fade-in">${data.question}</h2>
-    <div id="options" class="flex flex-col gap-4 w-full">${optionsHtml}</div>
-    ${isMultiple?'<button onclick="handleAnswerMultiple()" class="btn mt-6 py-3 px-6 rounded-none font-bold text-lg fade-in">Далее</button>':''}
+    <p class="text-sm mt-2 mb-2 fade-in">Вопрос ${currentQuestionIndex+1}</p>
+    <h2 class="text-xl font-bold mb-4 leading-tight fade-in">${data.question}</h2>
+    <div id="options" class="flex flex-col gap-2 w-full">${optionsHtml}</div>
+    ${isMultiple?'<button onclick="handleAnswerMultiple()" class="btn mt-4 py-2 px-6 rounded-none font-bold text-lg fade-in">Далее</button>':''}
   `;
   requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
 }
@@ -166,5 +143,45 @@ function renderCommentPage(comment){
   const progress=((currentQuestionIndex+1)/quizData.length)*100;
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:${progress}%"></div></div>
-    <h2 class="text-xl font-bold mt-4 mb-8 leading-tight fade-in">Комментарий</h2>
-    <p class="text-xl mb-6 leading-relaxed
+    <h2 class="text-xl font-bold mt-2 mb-4 leading-tight fade-in">Комментарий</h2>
+    <p class="text-lg mb-4 leading-relaxed fade-in">${comment}</p>
+    <button onclick="nextQuestion()" class="btn py-2 px-6 rounded-none font-bold text-lg fade-in">Далее</button>
+  `;
+  requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
+}
+
+function nextQuestion(){currentQuestionIndex++;renderQuestion();}
+
+// --- Финальные страницы ---
+function renderFirstResultPage(){
+  const clientAnswer=userAnswers.find(a=>a.question.includes('клиентов')).answer;
+  const resourcesAnswer=userAnswers.find(a=>a.question.includes('мертвым грузом')).answer;
+  const effectAnswer=userAnswers.find(a=>a.question.includes('эффект')).answer;
+  const readinessAnswer=userAnswers.find(a=>a.question.includes('готов')).answer;
+  let resultTitle='💸 Смотри, у тебя деньги лежат прямо под носом!';
+  let resultText='У тебя куча денег недозаработка!';
+
+  if(clientAnswer==='Почти никто'){resultText+='<br><br>Твоя клиентская база — это золотая жила, которую ты не используешь!';}
+  else if(clientAnswer==='Меньше половины'){resultText+='<br><br>Даже небольшие усилия могут удвоить твой доход с текущих клиентов.';}
+
+  if(resourcesAnswer.includes('Контент / материалы')){resultText+='<br><br>Твой контент — это твой главный ресурс! Его легко превратить в новый источник дохода.';}
+  if(resourcesAnswer.includes('Товары / услуги')){resultText+='<br><br>Твои товары и услуги могут приносить больше денег, нужно лишь правильно их преподнести.';}
+  if(resourcesAnswer.includes('Навыки сотрудников')){resultText+='<br><br>Навыки твоей команды — это скрытый потенциал, который можно монетизировать, предлагая новые услуги.';}
+  if(resourcesAnswer.includes('Партнёры / каналы')){resultText+='<br><br>Твои связи и каналы — это ключ к расширению. Пора их использовать для новых продаж!';}
+
+  if(effectAnswer==='Мощный' && ['Конечно','Конечно, конечно, конечно!'].includes(readinessAnswer)){
+    resultTitle='🚀 Ты уже в турбо-режиме!';
+    resultText='Твоя готовность и амбиции — это ключ к успеху. Ты точно заберёшь все деньги, которые лежат у тебя под носом.';
+  }
+
+  container.innerHTML=`
+    <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
+    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight fade-in">${resultTitle}</h2>
+    <p class="text-lg mb-4 leading-relaxed fade-in">${resultText}</p>
+    <button onclick="renderFinalCtaPage()" class="btn py-2 px-6 rounded-none font-bold text-lg fade-in">А что дальше?</button>
+  `;
+  requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
+}
+
+function renderFinalCtaPage(){
+  const whatsappLink='https://wa.me/79035160414?text='+encodeURIComponent('Привет, Антон! Хочу запис
