@@ -9,79 +9,96 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #001f3f; /* DOS-синий фон */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 1rem;
-  }
-  h1,h2,h3 { font-family: 'Press Start 2P', cursive; color: #212121; }
-  .container {
-    background-color: #fff;
-    border: 2px solid #212121;
-    box-shadow: 4px 4px 0 #212121;
-    padding: 1rem;
-    width: 100%;
-    max-width: 32rem;
-    max-height: 90vh;
-    text-align: center;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow-y: auto;
-  }
-  .btn {
-    border: 2px solid #212121;
-    background-color: #e0e0e0;
-    color: #212121;
-    box-shadow: 2px 2px 0 #212121;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-    cursor: pointer;
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-  }
-  .btn:hover { transform: translateY(-2px) translateX(-2px); }
-  .btn:active { transform: translateY(2px) translateX(2px); box-shadow:0 0 0 #212121; }
-  .btn-orange {
-    background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c;
-  }
-  .btn-orange:hover { background-color:#ea580c; }
-  .btn-orange:active { background-color:#c2410c; transform:translate(2px,2px); box-shadow:0 0 0 #c2410c; }
-  .selected { background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c; }
-  .progress-bar-container {
-    position:absolute; top:0; left:0; width:100%; height:10px; background-color:#e0e0e0;
-  }
-  .progress-bar {
-    height:100%; background-color:#212121; transition: width 0.5s ease-in-out, opacity 0.3s ease-in-out;
-    opacity:0; position:relative; overflow:hidden;
-  }
-  .progress-bar::after {
-    content:''; position:absolute; top:0; left:0; width:100%; height:100%;
-    background-image: repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,0.2) 0,
-      rgba(255,255,255,0.2) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-    animation: flicker 0.15s infinite linear;
-  }
-  @keyframes flicker {
-    0%,100%{transform:translateX(0);opacity:0.3;}
-    50%{transform:translateX(-2px);opacity:0.6;}
-  }
-  .fade-in { animation: fadeIn 0.5s ease forwards; opacity:0; }
-  @keyframes fadeIn { to{opacity:1;} }
+/* Фон с точками / звёздами */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #000;
+  background-image: radial-gradient(white 1px, transparent 1px),
+                    radial-gradient(white 1px, transparent 1px);
+  background-size: 20px 20px, 30px 30px;
+  background-position: 0 0, 10px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+/* Контейнер квиза */
+.container {
+  background-color: #fff;
+  border: 2px solid #212121;
+  box-shadow: 4px 4px 0 #212121;
+  padding: 1rem;
+  width: 100%;
+  max-width: 32rem;
+  max-height: 90vh;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+h1,h2,h3 { font-family: 'Press Start 2P', cursive; color: #212121; }
+
+.btn {
+  border: 2px solid #212121;
+  background-color: #e0e0e0;
+  color: #212121;
+  box-shadow: 2px 2px 0 #212121;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+}
+
+.btn:hover { transform: translateY(-2px) translateX(-2px); }
+.btn:active { transform: translateY(2px) translateX(2px); box-shadow:0 0 0 #212121; }
+
+.btn-orange {
+  background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c;
+}
+.btn-orange:hover { background-color:#ea580c; }
+.btn-orange:active { background-color:#c2410c; transform:translate(2px,2px); box-shadow:0 0 0 #c2410c; }
+
+.selected { background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c; }
+
+.progress-bar-container {
+  position:absolute; top:0; left:0; width:100%; height:10px; background-color:#e0e0e0;
+}
+.progress-bar {
+  height:100%; background-color:#212121; transition: width 0.5s ease-in-out, opacity 0.3s ease-in-out;
+  opacity:0; position:relative; overflow:hidden;
+}
+.progress-bar::after {
+  content:''; position:absolute; top:0; left:0; width:100%; height:100%;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.2) 0,
+    rgba(255,255,255,0.2) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  animation: flicker 0.15s infinite linear;
+}
+@keyframes flicker {
+  0%,100%{transform:translateX(0);opacity:0.3;}
+  50%{transform:translateX(-2px);opacity:0.6;}
+}
+
+.fade-in { animation: fadeIn 0.5s ease forwards; opacity:0; }
+@keyframes fadeIn { to{opacity:1;} }
+
 </style>
 </head>
 <body>
 <div id="quiz-container" class="container p-4 sm:p-8"></div>
 
 <script>
+// --- Данные квиза ---
 const quizData=[
   {type:'single',question:'Первый вопрос — ты хочешь зарабатывать больше и ничего на это не тратить? 😉',options:['Да','Конечно','Погнали!'],comments:{'Да':'Отлично! Твоё желание — первый шаг к результату! 🔥','Конечно':'Вот это настрой! Мы на одной волне! 😎','Погнали!':'Турбо-режим активирован! ⚡'}},
   {type:'single',question:'Сколько клиентов из твоей базы у тебя реально покупает?',options:['Больше половины','Меньше половины','Почти никто'],comments:{'Больше половины':'Отличный результат, но всегда есть потенциал для роста! 📈','Меньше половины':'Ты видишь проблему. Отлично, теперь давай найдём решение, чтобы активировать этих клиентов! 😉','Почти никто':'Аааа, это твои деньги, которых ты не видишь! 💸'}},
@@ -94,6 +111,7 @@ let currentQuestionIndex=0;
 const container=document.getElementById('quiz-container');
 const userAnswers=[];
 
+// --- Функции квиза ---
 function renderIntro(){
   container.innerHTML=`
     <h1 class="text-3xl font-bold mb-6 leading-tight fade-in">ДЕНЬГИ ПОД НОСОМ</h1>
@@ -123,9 +141,8 @@ function renderQuestion(){
 
 function handleAnswer(answer){
   const data=quizData[currentQuestionIndex];
-  let comment;
   userAnswers.push({question:data.question,answer:answer});
-  comment=(data.comments && answer)?data.comments[answer]:data.comment;
+  const comment=(data.comments && answer)?data.comments[answer]:data.comment;
   renderCommentPage(comment);
 }
 
@@ -184,4 +201,21 @@ function renderFirstResultPage(){
 }
 
 function renderFinalCtaPage(){
-  const whatsappLink='https://wa.me/79035160414?text='+encodeURIComponent('Привет, Антон! Хочу запис
+  const whatsappLink='https://wa.me/79035160414?text='+encodeURIComponent('Привет, Антон! Хочу записаться на бесплатную консультацию.');
+  container.innerHTML=`
+    <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
+    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight fade-in">Вот, что я тебе предлагаю...</h2>
+    <p class="text-lg mb-4 leading-relaxed fade-in">Хочешь лично познакомиться с двумя приятными людьми, о которых я говорил в начале, и они тебе реально помогут заработать на том, что у тебя уже есть?</p>
+    <div class="flex flex-col gap-2">
+      <a href="${whatsappLink}" target="_blank" class="btn btn-orange w-full py-2 px-6 rounded-none font-bold text-lg fade-in">Записаться на бесплатную консультацию</a>
+      <a href="https://t.me/dengi_pod_nosom" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg fade-in">Деньги под носом</a>
+    </div>
+  `;
+  requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
+}
+
+// --- Старт ---
+renderIntro();
+</script>
+</body>
+</html>
