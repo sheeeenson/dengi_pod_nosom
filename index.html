@@ -56,23 +56,22 @@ h1,h2,h3 { font-family: 'Press Start 2P', cursive; color: #212121; }
 .btn:hover { transform: translateY(-2px) translateX(-2px); }
 .btn:active { transform: translateY(2px) translateX(2px); box-shadow:0 0 0 #212121; }
 
+.btn-orange {
+  background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c;
+}
+.btn-orange:hover { background-color:#ea580c; }
+.btn-orange:active { background-color:#c2410c; transform:translate(2px,2px); box-shadow:0 0 0 #c2410c; }
+
 .selected { background-color:#f97316; color:white; box-shadow:2px 2px 0 #ea580c; }
 
 .progress-bar-container {
   position:absolute; top:0; left:0; width:100%; height:10px; background-color:#e0e0e0;
 }
 .progress-bar {
-  height:100%; 
-  background-color:#0ea5e9; /* синий как ДДОС */
-  transition: width 0.3s ease-in-out; 
-  opacity:1; 
-  position:relative; 
-  overflow:hidden;
+  height:100%; background-color:#212121; transition: width 0.3s ease-in-out; opacity:1; position:relative; overflow:hidden;
 }
 .progress-bar::after {
-  content:''; 
-  position:absolute; 
-  top:0; left:0; width:100%; height:100%;
+  content:''; position:absolute; top:0; left:0; width:100%; height:100%;
   background-image: repeating-linear-gradient(
     0deg,
     rgba(255,255,255,0.2) 0,
@@ -182,11 +181,9 @@ function renderFirstResultPage(){
 
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
-    <div style="overflow-y:auto; max-height:90vh;">
-      <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">${resultTitle}</h2>
-      <p class="text-lg mb-4 leading-relaxed">${resultText}</p>
-      <button onclick="renderFinalCtaPage()" class="btn py-2 px-6 rounded-none font-bold text-lg">А что дальше?</button>
-    </div>
+    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">${resultTitle}</h2>
+    <p class="text-lg mb-4 leading-relaxed">${resultText}</p>
+    <button onclick="renderFinalCtaPage()" class="btn py-2 px-6 rounded-none font-bold text-lg">А что дальше?</button>
   `;
 }
 
@@ -194,15 +191,11 @@ function renderFinalCtaPage(){
   const whatsappLink='https://wa.me/79035160414?text='+encodeURIComponent('Привет, Антон! Хочу записаться на бесплатную консультацию.');
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
-    <div style="overflow-y:auto; max-height:90vh;">
-      <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">Вот, что я тебе предлагаю...</h2>
-      <p class="text-lg mb-4 leading-relaxed">Хочешь лично познакомиться с двумя приятными людьми, о которых я говорил в начале, и они тебе реально помогут заработать на том, что у тебя уже есть?</p>
-      <div class="flex flex-col gap-2">
-        <a href="${whatsappLink}" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg" style="background-color:#0ea5e9; color:white; box-shadow:2px 2px 0 #0b72b8;">Записаться на бесплатную консультацию</a>
-        <p class="text-sm text-center mt-1 mb-4">В этом месяце — только 5 консультаций! 🔥</p>
-        <a href="https://t.me/dengi_pod_nosom" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg">Деньги под носом</a>
-        <p class="text-sm text-center mt-1">и вступайте в наш ТГ-канал, если ещё не там ↑</p>
-      </div>
+    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">Вот, что я тебе предлагаю...</h2>
+    <p class="text-lg mb-4 leading-relaxed">Хочешь лично познакомиться с двумя приятными людьми, о которых я говорил в начале, и они тебе реально помогут заработать на том, что у тебя уже есть?</p>
+    <div class="flex flex-col gap-2">
+      <a href="${whatsappLink}" target="_blank" class="btn btn-orange w-full py-2 px-6 rounded-none font-bold text-lg">Записаться на бесплатную консультацию</a>
+      <a href="https://t.me/dengi_pod_nosom" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg">Деньги под носом</a>
     </div>
   `;
 }
