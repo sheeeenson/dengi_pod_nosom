@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* Фон с точками / звёздами */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #000;
@@ -25,7 +24,6 @@ body {
   overflow: hidden;
 }
 
-/* Контейнер квиза */
 .container {
   background-color: #fff;
   border: 2px solid #212121;
@@ -70,8 +68,7 @@ h1,h2,h3 { font-family: 'Press Start 2P', cursive; color: #212121; }
   position:absolute; top:0; left:0; width:100%; height:10px; background-color:#e0e0e0;
 }
 .progress-bar {
-  height:100%; background-color:#212121; transition: width 0.5s ease-in-out, opacity 0.3s ease-in-out;
-  opacity:0; position:relative; overflow:hidden;
+  height:100%; background-color:#212121; transition: width 0.3s ease-in-out; opacity:1; position:relative; overflow:hidden;
 }
 .progress-bar::after {
   content:''; position:absolute; top:0; left:0; width:100%; height:100%;
@@ -85,20 +82,15 @@ h1,h2,h3 { font-family: 'Press Start 2P', cursive; color: #212121; }
   animation: flicker 0.15s infinite linear;
 }
 @keyframes flicker {
-  0%,100%{transform:translateX(0);opacity:0.3;}
-  50%{transform:translateX(-2px);opacity:0.6;}
+  0%,100%{transform:translateX(0);}
+  50%{transform:translateX(-2px);}
 }
-
-.fade-in { animation: fadeIn 0.5s ease forwards; opacity:0; }
-@keyframes fadeIn { to{opacity:1;} }
-
 </style>
 </head>
 <body>
 <div id="quiz-container" class="container p-4 sm:p-8"></div>
 
 <script>
-// --- Данные квиза ---
 const quizData=[
   {type:'single',question:'Первый вопрос — ты хочешь зарабатывать больше и ничего на это не тратить? 😉',options:['Да','Конечно','Погнали!'],comments:{'Да':'Отлично! Твоё желание — первый шаг к результату! 🔥','Конечно':'Вот это настрой! Мы на одной волне! 😎','Погнали!':'Турбо-режим активирован! ⚡'}},
   {type:'single',question:'Сколько клиентов из твоей базы у тебя реально покупает?',options:['Больше половины','Меньше половины','Почти никто'],comments:{'Больше половины':'Отличный результат, но всегда есть потенциал для роста! 📈','Меньше половины':'Ты видишь проблему. Отлично, теперь давай найдём решение, чтобы активировать этих клиентов! 😉','Почти никто':'Аааа, это твои деньги, которых ты не видишь! 💸'}},
@@ -111,13 +103,12 @@ let currentQuestionIndex=0;
 const container=document.getElementById('quiz-container');
 const userAnswers=[];
 
-// --- Функции квиза ---
 function renderIntro(){
   container.innerHTML=`
-    <h1 class="text-3xl font-bold mb-6 leading-tight fade-in">ДЕНЬГИ ПОД НОСОМ</h1>
-    <p class="text-xl mb-6 leading-relaxed fade-in">Привет! Меня создали два очень приятных человека, с которыми я хочу тебя познакомить 😎</p>
-    <p class="text-xl mb-8 leading-relaxed fade-in">Но сначала давай быстро посмотрим, сколько денег лежит у тебя прямо под носом 💸</p>
-    <button onclick="startQuiz()" class="btn py-3 px-6 rounded-none font-bold text-lg fade-in">Начать</button>
+    <h1 class="text-3xl font-bold mb-6 leading-tight">ДЕНЬГИ ПОД НОСОМ</h1>
+    <p class="text-xl mb-6 leading-relaxed">Привет! Меня создали два очень приятных человека, с которыми я хочу тебя познакомить 😎</p>
+    <p class="text-xl mb-8 leading-relaxed">Но сначала давай быстро посмотрим, сколько денег лежит у тебя прямо под носом 💸</p>
+    <button onclick="startQuiz()" class="btn py-3 px-6 rounded-none font-bold text-lg">Начать</button>
   `;
 }
 
@@ -128,15 +119,14 @@ function renderQuestion(){
   const data=quizData[currentQuestionIndex];
   const isMultiple=data.type==='multiple';
   const progress=(currentQuestionIndex/quizData.length)*100;
-  const optionsHtml=data.options.map(option=>`<button onclick="${isMultiple?'toggleSelection(this)':'handleAnswer(\''+option+'\')'}" class="btn w-full text-lg py-2 px-4 rounded-none font-bold leading-normal fade-in">${option}</button>`).join('');
+  const optionsHtml=data.options.map(option=>`<button onclick="${isMultiple?'toggleSelection(this)':'handleAnswer(\''+option+'\')'}" class="btn w-full text-lg py-2 px-4 rounded-none font-bold leading-normal">${option}</button>`).join('');
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:${progress}%"></div></div>
-    <p class="text-sm mt-2 mb-2 fade-in">Вопрос ${currentQuestionIndex+1}</p>
-    <h2 class="text-xl font-bold mb-4 leading-tight fade-in">${data.question}</h2>
+    <p class="text-sm mt-2 mb-2">Вопрос ${currentQuestionIndex+1}</p>
+    <h2 class="text-xl font-bold mb-4 leading-tight">${data.question}</h2>
     <div id="options" class="flex flex-col gap-2 w-full">${optionsHtml}</div>
-    ${isMultiple?'<button onclick="handleAnswerMultiple()" class="btn mt-4 py-2 px-6 rounded-none font-bold text-lg fade-in">Далее</button>':''}
+    ${isMultiple?'<button onclick="handleAnswerMultiple()" class="btn mt-4 py-2 px-6 rounded-none font-bold text-lg">Далее</button>':''}
   `;
-  requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
 }
 
 function handleAnswer(answer){
@@ -160,16 +150,14 @@ function renderCommentPage(comment){
   const progress=((currentQuestionIndex+1)/quizData.length)*100;
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:${progress}%"></div></div>
-    <h2 class="text-xl font-bold mt-2 mb-4 leading-tight fade-in">Комментарий</h2>
-    <p class="text-lg mb-4 leading-relaxed fade-in">${comment}</p>
-    <button onclick="nextQuestion()" class="btn py-2 px-6 rounded-none font-bold text-lg fade-in">Далее</button>
+    <h2 class="text-xl font-bold mt-2 mb-4 leading-tight">Комментарий</h2>
+    <p class="text-lg mb-4 leading-relaxed">${comment}</p>
+    <button onclick="nextQuestion()" class="btn py-2 px-6 rounded-none font-bold text-lg">Далее</button>
   `;
-  requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
 }
 
 function nextQuestion(){currentQuestionIndex++;renderQuestion();}
 
-// --- Финальные страницы ---
 function renderFirstResultPage(){
   const clientAnswer=userAnswers.find(a=>a.question.includes('клиентов')).answer;
   const resourcesAnswer=userAnswers.find(a=>a.question.includes('мертвым грузом')).answer;
@@ -193,28 +181,25 @@ function renderFirstResultPage(){
 
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
-    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight fade-in">${resultTitle}</h2>
-    <p class="text-lg mb-4 leading-relaxed fade-in">${resultText}</p>
-    <button onclick="renderFinalCtaPage()" class="btn py-2 px-6 rounded-none font-bold text-lg fade-in">А что дальше?</button>
+    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">${resultTitle}</h2>
+    <p class="text-lg mb-4 leading-relaxed">${resultText}</p>
+    <button onclick="renderFinalCtaPage()" class="btn py-2 px-6 rounded-none font-bold text-lg">А что дальше?</button>
   `;
-  requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
 }
 
 function renderFinalCtaPage(){
   const whatsappLink='https://wa.me/79035160414?text='+encodeURIComponent('Привет, Антон! Хочу записаться на бесплатную консультацию.');
   container.innerHTML=`
     <div class="progress-bar-container"><div class="progress-bar" style="width:100%"></div></div>
-    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight fade-in">Вот, что я тебе предлагаю...</h2>
-    <p class="text-lg mb-4 leading-relaxed fade-in">Хочешь лично познакомиться с двумя приятными людьми, о которых я говорил в начале, и они тебе реально помогут заработать на том, что у тебя уже есть?</p>
+    <h2 class="text-2xl font-bold mt-2 mb-4 leading-tight">Вот, что я тебе предлагаю...</h2>
+    <p class="text-lg mb-4 leading-relaxed">Хочешь лично познакомиться с двумя приятными людьми, о которых я говорил в начале, и они тебе реально помогут заработать на том, что у тебя уже есть?</p>
     <div class="flex flex-col gap-2">
-      <a href="${whatsappLink}" target="_blank" class="btn btn-orange w-full py-2 px-6 rounded-none font-bold text-lg fade-in">Записаться на бесплатную консультацию</a>
-      <a href="https://t.me/dengi_pod_nosom" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg fade-in">Деньги под носом</a>
+      <a href="${whatsappLink}" target="_blank" class="btn btn-orange w-full py-2 px-6 rounded-none font-bold text-lg">Записаться на бесплатную консультацию</a>
+      <a href="https://t.me/dengi_pod_nosom" target="_blank" class="btn w-full py-2 px-6 rounded-none font-bold text-lg">Деньги под носом</a>
     </div>
   `;
-  requestAnimationFrame(()=>{document.querySelector('.progress-bar').style.opacity='1';});
 }
 
-// --- Старт ---
 renderIntro();
 </script>
 </body>
